@@ -4,6 +4,16 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 
+/**
+ * ScreenWrapper Component: A standardized layout wrapper for all screens.
+ * Automatically handles safe area insets and optionally provides a ScrollView.
+ *
+ * @param {React.ReactNode} children - Screen content.
+ * @param {boolean} scroll - If true, wraps content in a ScrollView. Defaults to true.
+ * @param {object} style - Styles for the root SafeAreaView.
+ * @param {object} contentStyle - Styles for the content container.
+ * @param {boolean} noPadding - If true, removes the default horizontal padding.
+ */
 export default function ScreenWrapper({ children, scroll = true, style, contentStyle, noPadding }) {
   const { theme } = useTheme();
 

@@ -3,6 +3,16 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
+/**
+ * KriyaText Component: A wrapper around React Native's Text component that provides
+ * consistent typography variants based on the app's design system.
+ *
+ * @param {React.ReactNode} children - Text content.
+ * @param {'hero'|'title'|'heading'|'subheading'|'body'|'caption'|'label'|'mono'} variant - Typography variant.
+ * @param {string} color - Optional color override.
+ * @param {object} style - Additional styles.
+ * @param {boolean} mono - If true, uses a monospaced font family.
+ */
 export default function KriyaText({
   children, variant = 'body', color, style, mono, ...props
 }) {

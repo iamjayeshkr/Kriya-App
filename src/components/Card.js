@@ -3,6 +3,16 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { RADIUS, SHADOWS, SPACING } from '../constants/theme';
 
+/**
+ * Card Component: A versatile container with consistent styling, shadowing, and borders.
+ * Supports multiple variants for different context (e.g., standard, outlined, accent).
+ *
+ * @param {React.ReactNode} children - Content to be rendered inside the card.
+ * @param {object} style - Additional styles for the card container.
+ * @param {'default'|'alt'|'outlined'|'accent'|'glass'} variant - The visual style variant.
+ * @param {boolean} glow - If true, applies a more prominent glow shadow effect.
+ * @param {number} padding - Optional custom padding value.
+ */
 export default function Card({ children, style, variant = 'default', glow, padding }) {
   const { theme, isDark } = useTheme();
   const S = isDark ? SHADOWS.dark : SHADOWS.light;

@@ -7,14 +7,26 @@ import { CheckCircle, Circle, Flame, Trash2, Calendar } from 'lucide-react-nativ
 import { format } from 'date-fns';
 import { RADIUS, SPACING, WEEKDAYS } from '../constants/theme';
 
+/**
+ * HabitItem Component: A single row representing a habit in the list.
+ * Displays habit name, icon, streak, schedule, and linked tasks.
+ * Includes interactive completion toggle and deletion.
+ *
+ * @param {object} habit - The habit object containing its data (name, icon, color, schedule, etc.).
+ */
 export default function HabitItem({ habit }) {
   const { theme } = useTheme();
   const { toggleHabit, deleteHabit, tasks } = useApp();
   const today = format(new Date(), 'yyyy-MM-dd');
   const isCompleted = habit.completedDates?.includes(today);
+
+  // Animation values for scale effects on toggle
   const scale = useRef(new Animated.Value(1)).current;
   const checkScale = useRef(new Animated.Value(1)).current;
 
+  /**
+   * handleToggle: Animates the habit item and triggers the toggle logic in the context.
+   */
   const handleToggle = () => {
     Animated.sequence([
       Animated.spring(checkScale, { toValue: 0.8, useNativeDriver: true, speed: 60 }),

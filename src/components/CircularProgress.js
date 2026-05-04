@@ -4,6 +4,17 @@ import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
 
+/**
+ * CircularProgress Component: Renders a circular progress indicator using SVG.
+ * Often used for timers or percentage-based tracking.
+ *
+ * @param {number} size - The diameter of the circular progress bar.
+ * @param {number} progress - The completion percentage as a float between 0 and 1.
+ * @param {number} strokeWidth - The thickness of the progress ring.
+ * @param {string} color - The color of the active progress stroke.
+ * @param {string} trackColor - The color of the background track ring.
+ * @param {React.ReactNode} children - Optional content to be centered inside the ring (e.g., timer text).
+ */
 export default function CircularProgress({
   size = 200,
   progress = 0, // 0 to 1

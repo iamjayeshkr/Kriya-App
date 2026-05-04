@@ -5,6 +5,17 @@ import { useTheme } from '../context/ThemeContext';
 import { RADIUS, SPACING, SHADOWS } from '../constants/theme';
 import KriyaText from './KriyaText';
 
+/**
+ * StatCard Component: Displays a key performance indicator (KPI) or metric.
+ * Typically used in the dashboard or analytics screens.
+ *
+ * @param {string} label - Title of the statistic.
+ * @param {string|number} value - Main numerical or text value to highlight.
+ * @param {string} sub - Optional subtitle or secondary metric info.
+ * @param {React.ReactNode} icon - Icon component representing the metric.
+ * @param {string} color - Accent color for the icon and value.
+ * @param {object} style - Additional container styles.
+ */
 export default function StatCard({ label, value, sub, icon: Icon, color, style }) {
   const { theme, isDark } = useTheme();
   const shadows = isDark ? SHADOWS.dark : SHADOWS.light;

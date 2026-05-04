@@ -4,6 +4,15 @@ import { useTheme } from '../context/ThemeContext';
 import KriyaText from './KriyaText';
 import { SPACING } from '../constants/theme';
 
+/**
+ * EmptyState Component: A placeholder view to display when there is no content to show.
+ * Includes an icon, title, subtitle, and an optional call-to-action button.
+ *
+ * @param {React.ReactNode} icon - Icon component to display at the top.
+ * @param {string} title - The main heading text.
+ * @param {string} subtitle - Supporting description text.
+ * @param {React.ReactNode} action - Optional action component (e.g., a Button).
+ */
 export default function EmptyState({ icon: Icon, title, subtitle, action }) {
   const { theme } = useTheme();
   return (

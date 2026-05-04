@@ -4,6 +4,20 @@ import { TouchableOpacity, Text, StyleSheet, View, ActivityIndicator, Animated }
 import { useTheme } from '../context/ThemeContext';
 import { RADIUS } from '../constants/theme';
 
+/**
+ * Button Component: A customizable, animated button with multiple variants and sizes.
+ * Supports loading states, icons, and scale animations on press.
+ *
+ * @param {string} title - The text label for the button.
+ * @param {function} onPress - Callback function when button is pressed.
+ * @param {'primary'|'secondary'|'ghost'|'danger'} variant - The visual style of the button.
+ * @param {'sm'|'md'|'lg'} size - The size variant of the button.
+ * @param {React.ReactNode} icon - Optional icon to display next to the text.
+ * @param {boolean} loading - Shows a spinner and disables the button if true.
+ * @param {boolean} disabled - Disables interactions and dims the button if true.
+ * @param {object} style - Optional container styles.
+ * @param {object} textStyle - Optional text styles.
+ */
 export default function Button({
   title, onPress, variant = 'primary', size = 'md',
   icon, loading, disabled, style, textStyle,

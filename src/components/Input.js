@@ -5,6 +5,24 @@ import { useTheme } from '../context/ThemeContext';
 import { RADIUS, SPACING } from '../constants/theme';
 import { Eye, EyeOff } from 'lucide-react-native';
 
+/**
+ * Input Component: A styled text input field with support for labels, icons, errors,
+ * and password visibility toggles.
+ *
+ * @param {string} label - Optional label text above the input.
+ * @param {string} placeholder - Placeholder text inside the input.
+ * @param {string} value - Current value of the input.
+ * @param {function} onChangeText - Callback when text changes.
+ * @param {string} error - Error message text to display below the input.
+ * @param {boolean} secureTextEntry - If true, masks the input text (for passwords).
+ * @param {React.ReactNode} icon - Optional icon to display on the left.
+ * @param {boolean} multiline - If true, the text input can have multiple lines.
+ * @param {number} numberOfLines - Number of lines for multiline input.
+ * @param {string} keyboardType - Keyboard type (e.g., 'email-address', 'numeric').
+ * @param {string} autoCapitalize - Auto-capitalization behavior.
+ * @param {object} style - Styles for the outer wrapper.
+ * @param {object} inputStyle - Styles for the TextInput component itself.
+ */
 export default function Input({
   label, placeholder, value, onChangeText, error,
   secureTextEntry, icon, multiline, numberOfLines, keyboardType,

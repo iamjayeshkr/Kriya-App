@@ -5,16 +5,27 @@ import { useApp } from '../context/AppContext';
 import { CheckCircle, Circle, Trash2, Calendar } from 'lucide-react-native';
 import { RADIUS, SPACING, TASK_CATEGORIES, SHADOWS } from '../constants/theme';
 
+/**
+ * TaskItem Component: A row item for the task list.
+ * Displays task title, priority, category, and due date.
+ * Allows toggling completion status and deleting the task with animations.
+ *
+ * @param {object} task - The task object with all its data.
+ * @param {function} onPress - Callback when the task item is pressed (e.g., to view details).
+ * @param {boolean} showDelete - If true, displays the trash icon to delete the task.
+ */
 export default function TaskItem({ task, onPress, showDelete = true }) {
   const { theme, isDark } = useTheme();
   const { toggleTask, deleteTask } = useApp();
+
+  // Animation refs for scale (toggle) and opacity (delete)
   const scale   = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(1)).current;
   const S = isDark ? SHADOWS.dark : SHADOWS.light;
 
-  const category = TASK_CATEGORIES.find((c) => c.id === task.category) || TASK_CATEGORIES[5];
-  const pColor   = theme.priority[task.priority] || theme.accent.secondary;
-
+  /**
+   * handleToggle: Triggers a spring animation and toggles the task completion in state.
+   */
   const handleToggle = useCallback(() => {
     Animated.sequence([
       Animated.spring(scale, { toValue: 0.95, useNativeDriver: true, speed: 60 }),
@@ -23,6 +34,9 @@ export default function TaskItem({ task, onPress, showDelete = true }) {
     toggleTask(task.id);
   }, [task.id]);
 
+  /**
+   * handleDelete: Animates opacity to 0 and then removes the task from state.
+   */
   const handleDelete = useCallback(() => {
     Animated.timing(opacity, { toValue: 0, duration: 180, useNativeDriver: true }).start(() => deleteTask(task.id));
   }, [task.id]);
