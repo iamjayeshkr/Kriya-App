@@ -83,9 +83,18 @@ export default function SettingsScreen({ navigation }) {
             style={styles.profileGrad}
           >
             <View style={[styles.avatarLarge, { backgroundColor: theme.accent.primary + '20', borderColor: theme.border.accent }]}>
-              <KriyaText style={{ fontSize: 32, fontWeight: '900', color: theme.accent.primary, lineHeight: 38, includeFontPadding: false, textAlignVertical: 'center' }}>
-                {user?.name?.[0]?.toUpperCase()}
-              </KriyaText>
+              <KriyaText
+  style={{
+    fontSize: 32,
+    fontWeight: '900',
+    color: theme.accent.primary,
+    lineHeight: 36,              // 🔥 important
+    includeFontPadding: false,   // 🔥 fix cut
+    textAlignVertical: 'center', // 🔥 center fix
+  }}
+>
+  {user?.name?.[0]?.toUpperCase()}
+</KriyaText>
             </View>
             <KriyaText variant="heading" style={{ marginTop: SPACING.sm }}>{user?.name}</KriyaText>
             <KriyaText variant="caption" color={theme.text.secondary}>{user?.email}</KriyaText>
@@ -272,7 +281,7 @@ export default function SettingsScreen({ navigation }) {
               </View>
 
               <KriyaText variant="title" style={{ textAlign: 'center', marginTop: SPACING.sm }}>
-                Mohammad Sahil
+                Rudra Sharma
               </KriyaText>
               <KriyaText variant="caption" color={theme.accent.primary} style={{ textAlign: 'center', letterSpacing: 1.5, marginTop: 2 }}>
                 FULL STACK DEVELOPER · CREATOR OF KRIYA
@@ -280,7 +289,7 @@ export default function SettingsScreen({ navigation }) {
 
               <View style={[styles.devBio, { backgroundColor: theme.bg.card, borderColor: theme.border.default }]}>
                 <KriyaText variant="body" color={theme.text.secondary} style={{ lineHeight: 22, textAlign: 'center' }}>
-                  Hey! I'm Sahil, a passionate developer from Patna, Bihar 🇮🇳.
+                  Hey! I'm Rudra Sharma, a passionate developer from Gaya, Bihar 🇮🇳.
                   I built Kriya to solve the real productivity struggles I faced as a student —
                   procrastination, lack of focus, and keeping up with habits. This app is my
                   answer to those late nights and missed deadlines. Hope it helps you too! 🚀
@@ -317,7 +326,7 @@ export default function SettingsScreen({ navigation }) {
               <View style={[styles.madeWith, { borderColor: theme.border.subtle }]}>
                 <Heart size={14} color={theme.accent.red} fill={theme.accent.red} />
                 <KriyaText variant="caption" color={theme.text.muted} style={{ marginLeft: 6 }}>
-                  Made with love in Patna, Bihar
+                  Made with love in Gaya, Bihar
                 </KriyaText>
               </View>
 
