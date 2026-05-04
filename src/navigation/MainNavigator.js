@@ -16,6 +16,11 @@ import SettingsScreen   from '../screens/main/SettingsScreen';
 const Tab   = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+/**
+ * TasksStack: A nested stack navigator for Task-related screens.
+ * This allows navigation between the task list and the details of a specific task
+ * while staying within the "Tasks" tab.
+ */
 function TasksStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -25,6 +30,7 @@ function TasksStack() {
   );
 }
 
+// Configuration for the bottom tabs
 const TABS = [
   { name: 'Dashboard', label: 'Home',     Icon: Home,       emoji: '🏠' },
   { name: 'Tasks',     label: 'Tasks',    Icon: CheckSquare, emoji: '✅' },
@@ -33,6 +39,10 @@ const TABS = [
   { name: 'Settings',  label: 'Settings', Icon: Settings,    emoji: '⚙️' },
 ];
 
+/**
+ * MainNavigator: The main tab-based navigation for authenticated users.
+ * It defines the persistent bottom navigation bar and the main screens of the app.
+ */
 export default function MainNavigator() {
   const { theme } = useTheme();
 
@@ -49,11 +59,13 @@ export default function MainNavigator() {
             backgroundColor: theme.bg.card,
             borderTopColor: theme.border.default,
             borderTopWidth: 1,
+            // Adjust height based on platform for safe area compliance
             height: Platform.OS === 'ios' ? 88 : 66,
             paddingBottom: Platform.OS === 'ios' ? 28 : 10,
             paddingTop: 8,
           },
           tabBarLabelStyle: { fontSize: 10, fontWeight: '700', letterSpacing: 0.3 },
+          // Custom icon rendering with a highlighted background for the active tab
           tabBarIcon: ({ focused, color, size }) => {
             const Icon = tab?.Icon || Home;
             return (

@@ -13,6 +13,10 @@ import { SPACING, RADIUS, MOTIVATIONAL_QUOTES, SHADOWS } from '../../constants/t
 
 const { width } = Dimensions.get('window');
 
+/**
+ * ROLE_CONFIG: Defines the visual style and content for different user roles.
+ * Each role has a specific color, emoji, greeting suffix, tips, and quick actions.
+ */
 const ROLE_CONFIG = {
   student: {
     color: '#60a5fa', emoji: '🎓', label: 'Student Mode',
@@ -56,6 +60,9 @@ const ROLE_CONFIG = {
   },
 };
 
+/**
+ * Returns a time-appropriate greeting string based on the current hour.
+ */
 function getGreeting() {
   const h = new Date().getHours();
   if (h < 5)  return 'Late night 🌙';
@@ -64,6 +71,14 @@ function getGreeting() {
   return 'Good evening 🌆';
 }
 
+/**
+ * MiniStatCard: A small UI card displaying a single statistic (e.g., tasks done).
+ * @param {string} label - The label for the stat.
+ * @param {string|number} value - The main value to display.
+ * @param {string} sub - Secondary information (e.g., "/5").
+ * @param {string} color - The accent color for the stat.
+ * @param {React.Component} icon - The icon component to display.
+ */
 function MiniStatCard({ label, value, sub, color, icon: Icon }) {
   const { theme, isDark } = useTheme();
   const S = isDark ? SHADOWS.dark : SHADOWS.light;
@@ -79,17 +94,25 @@ function MiniStatCard({ label, value, sub, color, icon: Icon }) {
   );
 }
 
+/**
+ * DashboardScreen: The main landing screen after login.
+ * Displays a summary of today's progress, stats, pending tasks, habits, and role-based tips.
+ */
 export default function DashboardScreen({ navigation }) {
   const { theme, isDark } = useTheme();
   const { user, tasks, habits, focusSessions } = useApp();
 
+  // Load configuration based on the user's selected role
   const roleConfig = ROLE_CONFIG[user?.role] || ROLE_CONFIG.student;
   const roleColor  = roleConfig.color;
 
   const today    = format(new Date(), 'yyyy-MM-dd');
   const todayDow = new Date().getDay();
+
+  // Memoize the quote so it doesn't change on every re-render, only every hour
   const quote    = useMemo(() => MOTIVATIONAL_QUOTES[new Date().getHours() % MOTIVATIONAL_QUOTES.length], []);
 
+  // Calculate statistics for today
   const todayTasks     = tasks.filter((t) => t.dueDate?.startsWith(today) || t.createdAt?.startsWith(today));
   const completedToday = todayTasks.filter((t) => t.completed).length;
 
@@ -99,6 +122,7 @@ export default function DashboardScreen({ navigation }) {
   const todaySessions = focusSessions.filter((s) => s.date?.startsWith(today));
   const focusMinutes  = todaySessions.reduce((a, s) => a + (s.duration || 0), 0);
 
+  // Overall progress percentage
   const totalItems = todayTasks.length + todayHabits.length;
   const doneItems  = completedToday + doneHabits;
   const pct        = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
@@ -106,6 +130,7 @@ export default function DashboardScreen({ navigation }) {
   const pendingTasks = todayTasks.filter((t) => !t.completed).slice(0, 3);
   const maxStreak    = habits.reduce((m, h) => Math.max(m, h.streak || 0), 0);
 
+  // Background gradient colors based on theme
   const gradColors = isDark
     ? [roleColor + '22', theme.accent.secondary + '10', 'transparent']
     : [roleColor + '12', theme.accent.secondary + '08', 'transparent'];

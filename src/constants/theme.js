@@ -1,4 +1,11 @@
-// src/constants/theme.js — v3: Premium UI inspired design system
+/**
+ * Design System Constants
+ * This file defines the visual language of the application including:
+ * - Theme definitions (Dark, Warm, AMOLED)
+ * - Spacing and Radius scales
+ * - Shadows for elevation
+ * - Shared content like motivational quotes and task categories
+ */
 
 export const DARK_THEME = {
   mode: 'dark', name: 'Dark',

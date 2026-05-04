@@ -2,14 +2,21 @@ import React, { createContext, useContext, useReducer, useEffect, useRef } from 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format } from 'date-fns';
 
+/**
+ * AppContext: The central state management for the Kriya application.
+ * It handles user authentication, tasks, habits, focus sessions, and settings.
+ * Data is persisted locally using AsyncStorage.
+ */
 const AppContext = createContext(null);
 
+// Storage keys for AsyncStorage
 const KEYS = {
   USER: '@kriya_user', TASKS: '@kriya_tasks', HABITS: '@kriya_habits',
   SESSIONS: '@kriya_sessions', SETTINGS: '@kriya_settings',
   ONBOARDING_DONE: '@kriya_onboarding',
 };
 
+// Initial state for the application
 const init = {
   user: null, isAuthenticated: false, isLoading: true,
   onboardingDone: false,
@@ -17,6 +24,11 @@ const init = {
   settings: { focusDuration: 25, breakDuration: 5, notifications: true },
 };
 
+/**
+ * Calculates the current daily streak for a habit based on completed dates.
+ * @param {string[]} dates - Array of ISO date strings (YYYY-MM-DD).
+ * @returns {number} - The current streak count.
+ */
 function calcStreak(dates) {
   if (!dates?.length) return 0;
   const sorted = [...dates].sort().reverse();
@@ -24,12 +36,16 @@ function calcStreak(dates) {
   const now = new Date(); now.setHours(12, 0, 0, 0);
   for (let i = 0; i < sorted.length; i++) {
     const d = new Date(sorted[i] + 'T12:00:00'); d.setHours(12, 0, 0, 0);
+    // Check if the date is today (i=0) or exactly 'i' days before today
     if (Math.round((now - d) / 86400000) === i) streak++;
     else break;
   }
   return streak;
 }
 
+/**
+ * Reducer function to handle all state transitions.
+ */
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_LOADING':     return { ...state, isLoading: action.payload };
@@ -55,6 +71,7 @@ function reducer(state, action) {
           const done  = dates.includes(today);
           const newDates = done ? dates.filter((d) => d !== today) : [...dates, today];
           const streak   = calcStreak(newDates);
+          // If we just marked it done, streak is at least 1
           const final    = newDates.includes(today) ? Math.max(streak, 1) : streak;
           return { ...h, completedDates: newDates, streak: final };
         }),

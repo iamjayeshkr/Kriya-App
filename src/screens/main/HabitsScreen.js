@@ -18,47 +18,72 @@ import { format } from 'date-fns';
 
 const COLORS = ['#a78bfa', '#5bc4d6', '#a78bfa', '#f4a05e', '#f07070', '#f5c842', '#34d399', '#f472b6'];
 
+/**
+ * HabitsScreen: Manage and track daily habits.
+ * Features:
+ * - List of active habits with streak tracking.
+ * - Progress banner showing today's completion rate.
+ * - Habit creation with custom icons, colors, and scheduling.
+ * - Advanced options to link habits to specific tasks.
+ */
 export default function HabitsScreen() {
   const { theme } = useTheme();
   const { habits, tasks, addHabit } = useApp();
+
+  // Local state for the "New Habit" modal
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
   const [selectedColor, setSelectedColor] = useState(COLORS[0]);
   const [selectedIcon, setSelectedIcon] = useState(HABIT_ICONS[0]);
-  const [scheduledDays, setScheduledDays] = useState([]); // [] = every day
+  const [scheduledDays, setScheduledDays] = useState([]); // Array of day indices (0-6). Empty means every day.
   const [linkedTaskIds, setLinkedTaskIds] = useState([]);
   const [creating, setCreating] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const todayDow = new Date().getDay(); // 0=Sun
+  const todayDow = new Date().getDay(); // 0 = Sunday
 
-  // Only show habits scheduled for today (empty scheduledDays = every day)
+  /**
+   * todayHabits: Filters habits to show only those scheduled for the current day.
+   */
   const todayHabits = habits.filter((h) =>
     !h.scheduledDays || h.scheduledDays.length === 0 || h.scheduledDays.includes(todayDow)
   );
+
   const completedToday = todayHabits.filter((h) => h.completedDates?.includes(today)).length;
   const completionRate = todayHabits.length > 0 ? Math.round((completedToday / todayHabits.length) * 100) : 0;
 
-  // Active tasks for linking
+  // Active tasks available for linking to a habit
   const activeTasks = tasks.filter((t) => !t.completed);
 
+  /**
+   * toggleDay: Adds or removes a day from the habit's schedule.
+   */
   const toggleDay = (day) => {
     setScheduledDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
+  /**
+   * toggleTask: Links or unlinks a task from the new habit.
+   */
   const toggleTask = (taskId) => {
     setLinkedTaskIds((prev) =>
       prev.includes(taskId) ? prev.filter((id) => id !== taskId) : [...prev, taskId]
     );
   };
 
+  /**
+   * handleCreate: Saves the new habit to global state.
+   */
   const handleCreate = useCallback(async () => {
     if (!name.trim()) return;
     setCreating(true);
+
+    // UI feedback delay
     await new Promise((r) => setTimeout(r, 200));
+
     addHabit({
       name: name.trim(),
       color: selectedColor,
@@ -66,10 +91,14 @@ export default function HabitsScreen() {
       scheduledDays,
       linkedTaskIds,
     });
+
     handleClose();
     setCreating(false);
   }, [name, selectedColor, selectedIcon, scheduledDays, linkedTaskIds, addHabit]);
 
+  /**
+   * handleClose: Resets modal state and closes it.
+   */
   const handleClose = () => {
     setName('');
     setSelectedColor(COLORS[0]);
@@ -80,6 +109,7 @@ export default function HabitsScreen() {
     setShowModal(false);
   };
 
+  // Human-readable string for the habit's schedule
   const scheduleLabel = scheduledDays.length === 0
     ? 'Every day'
     : scheduledDays.sort().map((d) => WEEKDAYS[d]).join(', ');

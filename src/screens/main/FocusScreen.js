@@ -14,14 +14,23 @@ import { format } from 'date-fns';
 const { width } = Dimensions.get('window');
 function fmt(s) { return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
 
+/**
+ * FocusScreen: A Pomodoro-style timer to help users stay focused.
+ * Features:
+ * - Focus and Break modes with configurable durations.
+ * - Circular progress visualization.
+ * - Ability to link the focus session to a specific task.
+ * - Daily stats tracking (sessions and minutes).
+ */
 export default function FocusScreen() {
   const { theme, isDark } = useTheme();
   const { settings, addFocusSession, focusSessions, tasks } = useApp();
 
+  // Load timer durations from global settings
   const focusSecs = (settings.focusDuration || 25) * 60;
   const breakSecs = (settings.breakDuration || 5) * 60;
 
-  const [mode, setMode]           = useState('focus');
+  const [mode, setMode]           = useState('focus'); // 'focus' or 'break'
   const [timeLeft, setTimeLeft]   = useState(focusSecs);
   const [running, setRunning]     = useState(false);
   const [sessCount, setSessCount] = useState(0);
@@ -29,17 +38,23 @@ export default function FocusScreen() {
   const [showTaskPick, setShowTaskPick] = useState(false);
 
   const quote = useMemo(() => MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)], []);
+
+  // Refs to keep track of current values in intervals without triggering re-renders
   const intervalRef = useRef(null);
   const modeRef = useRef(mode);
   const focusRef = useRef(focusSecs);
   const breakRef = useRef(breakSecs);
   const settingsRef = useRef(settings);
+
   useEffect(() => { modeRef.current = mode; }, [mode]);
   useEffect(() => { focusRef.current = focusSecs; }, [focusSecs]);
   useEffect(() => { breakRef.current = breakSecs; }, [breakSecs]);
   useEffect(() => { settingsRef.current = settings; }, [settings]);
+
+  // Update time left when settings change, but only if the timer isn't running
   useEffect(() => { if (!running) setTimeLeft(mode === 'focus' ? focusSecs : breakSecs); }, [focusSecs, breakSecs]);
 
+  // Handle subtle pulsing animation while the timer is running
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const pulseLoop = useRef(null);
   useEffect(() => {
@@ -56,6 +71,12 @@ export default function FocusScreen() {
     return () => pulseLoop.current?.stop();
   }, [running]);
 
+  /**
+   * handleComplete: Called when the timer reaches zero.
+   * Logic:
+   * - If Focus mode ends: Save the session, increment count, and switch to Break.
+   * - If Break mode ends: Switch back to Focus.
+   */
   const handleComplete = useCallback(() => {
     if (modeRef.current === 'focus') {
       addFocusSession({ duration: settingsRef.current.focusDuration || 25, mode: 'focus', completed: true, taskId: linkedTask?.id });
@@ -66,11 +87,21 @@ export default function FocusScreen() {
     }
   }, [addFocusSession, linkedTask]);
 
+  /**
+   * Main timer interval logic.
+   * Decrements timeLeft every second when 'running' is true.
+   */
   useEffect(() => {
     if (running) {
       intervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev <= 1) { clearInterval(intervalRef.current); setRunning(false); Vibration.vibrate([0,300,100,300]); handleComplete(); return 0; }
+          if (prev <= 1) {
+            clearInterval(intervalRef.current);
+            setRunning(false);
+            Vibration.vibrate([0,300,100,300]);
+            handleComplete();
+            return 0;
+          }
           return prev - 1;
         });
       }, 1000);
@@ -81,6 +112,8 @@ export default function FocusScreen() {
   const totalSecs  = mode === 'focus' ? focusSecs : breakSecs;
   const progress   = totalSecs > 0 ? 1 - timeLeft / totalSecs : 0;
   const color      = mode === 'focus' ? theme.accent.primary : theme.accent.secondary;
+
+  // Stats for today
   const today      = format(new Date(), 'yyyy-MM-dd');
   const todaySess  = focusSessions.filter((s) => s.date?.startsWith(today));
   const totalMins  = todaySess.reduce((a, s) => a + (s.duration || 0), 0);

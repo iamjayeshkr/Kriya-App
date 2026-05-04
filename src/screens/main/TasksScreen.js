@@ -17,12 +17,20 @@ const FILTERS    = ['all','active','completed'];
 
 function isValidDate(s) { return s && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T12:00:00')); }
 
+/**
+ * TasksScreen: Displays a list of user tasks with filtering and creation capabilities.
+ * Users can filter by completion status (All, Active, Completed) or by category.
+ */
 export default function TasksScreen({ navigation }) {
   const { theme, isDark } = useTheme();
   const { tasks, addTask } = useApp();
+
+  // Local state for task creation modal and filters
   const [showModal, setShowModal]     = useState(false);
   const [filter, setFilter]           = useState('all');
   const [catFilter, setCatFilter]     = useState('all');
+
+  // State for new task form fields
   const [title, setTitle]             = useState('');
   const [priority, setPriority]       = useState('medium');
   const [category, setCategory]       = useState('other');
@@ -30,6 +38,9 @@ export default function TasksScreen({ navigation }) {
   const [dueDateErr, setDueDateErr]   = useState('');
   const [creating, setCreating]       = useState(false);
 
+  /**
+   * filtered: Memoized list of tasks based on the active filters.
+   */
   const filtered = useMemo(() =>
     tasks
       .filter((t) => filter === 'all' ? true : filter === 'active' ? !t.completed : t.completed)
@@ -39,12 +50,20 @@ export default function TasksScreen({ navigation }) {
   const activeCnt    = tasks.filter((t) => !t.completed).length;
   const completedCnt = tasks.filter((t) => t.completed).length;
 
+  /**
+   * handleCreate: Validates and saves a new task to the global state.
+   */
   const handleCreate = useCallback(async () => {
     if (!title.trim()) return;
     if (dueDate && !isValidDate(dueDate)) { setDueDateErr('Use YYYY-MM-DD format'); return; }
     setDueDateErr(''); setCreating(true);
+
+    // Artificial delay for better UX feel
     await new Promise((r) => setTimeout(r, 150));
+
     addTask({ title: title.trim(), priority, category, dueDate: dueDate || null });
+
+    // Reset form and close modal
     setTitle(''); setPriority('medium'); setCategory('other'); setDueDate(''); setShowModal(false);
     setCreating(false);
   }, [title, priority, category, dueDate, addTask]);
