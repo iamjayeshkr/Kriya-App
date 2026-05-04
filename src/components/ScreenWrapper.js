@@ -36,6 +36,6 @@ export default function ScreenWrapper({ children, scroll = true, style, contentS
 const styles = StyleSheet.create({
   safe:    { flex: 1 },
   flex:    { flex: 1 },
-  content: { paddingBottom: 24 },
+  content: { paddingBottom: 40, paddingTop: 8 },
   padding: { paddingHorizontal: 20 },
 });

@@ -16,7 +16,6 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import { SPACING, RADIUS } from '../../constants/theme';
-import { Linking } from 'react-native';
 
 const THEMES = [
   { key: 'dark',   label: 'Dark',   sub: 'Navy + violet',   bg: '#0f0f17', ac: '#a78bfa' },
@@ -60,7 +59,6 @@ export default function SettingsScreen({ navigation }) {
   const [showRole, setShowRole]     = useState(false);
   const [focusDur, setFocusDur]     = useState(String(settings.focusDuration || 25));
   const [breakDur, setBreakDur]     = useState(String(settings.breakDuration || 5));
-  
 
   useEffect(() => {
     setFocusDur(String(settings.focusDuration || 25));
@@ -70,7 +68,6 @@ export default function SettingsScreen({ navigation }) {
   const current     = THEMES.find((t) => t.key === themeName) || THEMES[0];
   const currentRole = ROLES.find((r) => r.id === user?.role);
   const gradColors  = isDark ? [theme.accent.primary + '18', theme.bg.primary] : [theme.accent.primary + '08', theme.bg.primary];
-  const githubUrl = "https://github.com/iamjayeshkr"; 
 
   return (
     <>
@@ -86,7 +83,7 @@ export default function SettingsScreen({ navigation }) {
             style={styles.profileGrad}
           >
             <View style={[styles.avatarLarge, { backgroundColor: theme.accent.primary + '20', borderColor: theme.border.accent }]}>
-              <KriyaText style={{ fontSize: 32, fontWeight: '900', color: theme.accent.primary }}>
+              <KriyaText style={{ fontSize: 32, fontWeight: '900', color: theme.accent.primary, lineHeight: 38, includeFontPadding: false, textAlignVertical: 'center' }}>
                 {user?.name?.[0]?.toUpperCase()}
               </KriyaText>
             </View>
@@ -275,7 +272,7 @@ export default function SettingsScreen({ navigation }) {
               </View>
 
               <KriyaText variant="title" style={{ textAlign: 'center', marginTop: SPACING.sm }}>
-                Rudra Sharma
+                Mohammad Sahil
               </KriyaText>
               <KriyaText variant="caption" color={theme.accent.primary} style={{ textAlign: 'center', letterSpacing: 1.5, marginTop: 2 }}>
                 FULL STACK DEVELOPER · CREATOR OF KRIYA
@@ -283,7 +280,7 @@ export default function SettingsScreen({ navigation }) {
 
               <View style={[styles.devBio, { backgroundColor: theme.bg.card, borderColor: theme.border.default }]}>
                 <KriyaText variant="body" color={theme.text.secondary} style={{ lineHeight: 22, textAlign: 'center' }}>
-                  Hey! I'm Rudra, a passionate developer from Gaya, Bihar 🇮🇳.
+                  Hey! I'm Sahil, a passionate developer from Patna, Bihar 🇮🇳.
                   I built Kriya to solve the real productivity struggles I faced as a student —
                   procrastination, lack of focus, and keeping up with habits. This app is my
                   answer to those late nights and missed deadlines. Hope it helps you too! 🚀
@@ -307,48 +304,15 @@ export default function SettingsScreen({ navigation }) {
 
               {/* Contact row */}
               <View style={styles.devContact}>
-  
-  <TouchableOpacity
-    onPress={() => Linking.openURL(githubUrl)}
-    style={[
-      styles.contactBtn,
-      {
-        backgroundColor: theme.accent.blue + '18',
-        borderColor: theme.accent.blue + '40'
-      }
-    ]}
-  >
-    <Github size={18} color={theme.accent.blue} />
-    <KriyaText
-      variant="caption"
-      color={theme.accent.blue}
-      style={{ marginLeft: 6 }}
-    >
-      GitHub
-    </KriyaText>
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    onPress={() => Linking.openURL("mailto:your@email.com")}
-    style={[
-      styles.contactBtn,
-      {
-        backgroundColor: theme.accent.primary + '18',
-        borderColor: theme.accent.primary + '40'
-      }
-    ]}
-  >
-    <Mail size={18} color={theme.accent.primary} />
-    <KriyaText
-      variant="caption"
-      color={theme.accent.primary}
-      style={{ marginLeft: 6 }}
-    >
-      Email
-    </KriyaText>
-  </TouchableOpacity>
-
-</View>
+                <TouchableOpacity style={[styles.contactBtn, { backgroundColor: theme.accent.blue + '18', borderColor: theme.accent.blue + '40' }]}>
+                  <Github size={18} color={theme.accent.blue} />
+                  <KriyaText variant="caption" color={theme.accent.blue} style={{ marginLeft: 6 }}>GitHub</KriyaText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.contactBtn, { backgroundColor: theme.accent.primary + '18', borderColor: theme.accent.primary + '40' }]}>
+                  <Mail size={18} color={theme.accent.primary} />
+                  <KriyaText variant="caption" color={theme.accent.primary} style={{ marginLeft: 6 }}>Email</KriyaText>
+                </TouchableOpacity>
+              </View>
 
               <View style={[styles.madeWith, { borderColor: theme.border.subtle }]}>
                 <Heart size={14} color={theme.accent.red} fill={theme.accent.red} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, TouchableOpacity, ScrollView,
+  View, StyleSheet, TouchableOpacity, ScrollView, Text,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../context/ThemeContext';
@@ -60,7 +60,7 @@ export default function RoleSelectScreen() {
         <View style={[styles.blob2, { backgroundColor: theme.accent.secondary + '15' }]} />
 
         <View style={styles.header}>
-          <KriyaText style={{ fontSize: 40 }}>👋</KriyaText>
+          <Text style={{ fontSize: 40 }}>👋</Text>
           <KriyaText variant="title" style={{ marginTop: SPACING.sm, textAlign: 'center' }}>
             Welcome, {user?.name?.split(' ')[0]}!
           </KriyaText>
@@ -85,7 +85,7 @@ export default function RoleSelectScreen() {
                   <LinearGradient colors={role.gradient} style={StyleSheet.absoluteFill} />
                 )}
                 <View style={styles.roleTop}>
-                  <KriyaText style={{ fontSize: 34 }}>{role.emoji}</KriyaText>
+                  <Text style={{ fontSize: 34 }}>{role.emoji}</Text>
                   {isSelected && (
                     <View style={[styles.checkBadge, { backgroundColor: role.color }]}>
                       <KriyaText style={{ color: '#fff', fontSize: 13, fontWeight: '900' }}>✓</KriyaText>

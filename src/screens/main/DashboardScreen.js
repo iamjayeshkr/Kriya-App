@@ -117,10 +117,10 @@ export default function DashboardScreen({ navigation }) {
       </View>
 
       {/* Header row */}
-      <View style={styles.headerRow}>
+      <View style={[styles.headerRow, { zIndex: 1 }]}>
         <View style={{ flex: 1 }}>
           <View style={styles.roleTag}>
-            <KriyaText style={{ fontSize: 12 }}>{roleConfig.emoji}</KriyaText>
+            <Text style={{ fontSize: 12 }}>{roleConfig.emoji}</Text>
             <KriyaText variant="caption" color={roleColor} style={{ letterSpacing: 1.5, marginLeft: 4, fontSize: 10 }}>
               {roleConfig.label.toUpperCase()}
             </KriyaText>
